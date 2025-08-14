@@ -20,7 +20,7 @@
             overflow-x: hidden;
         }
 
-        /* --- UPDATED: Particle Canvas Styling --- */
+        /* Particle Canvas Styling */
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -312,7 +312,7 @@
         }
         .wish-item {
             border-bottom: 1px solid #eee;
-            padding: 15px 0;
+            padding: 10px 0; /* MODIFIED: Reduced padding */
             text-align: left;
         }
         .wish-item:last-child {
@@ -327,6 +327,7 @@
             font-style: italic;
             color: #555;
             line-height: 1.6;
+            font-size: 0.85rem; /* MODIFIED: Made text smaller */
         }
 
         /* Modal (popup) styling */
@@ -523,7 +524,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             
-            // --- UPDATED: Particle Effect ---
+            // --- Particle Effect ---
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
             let particlesArray;
