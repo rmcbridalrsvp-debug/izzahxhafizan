@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation | Izzah & Hafizan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Basic Styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #FDF5E6; /* Creamy background */
+            color: #5D5D5D; /* Dark gray text */
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        /* Snowfall Canvas Styling */
+        #snowfall {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all content */
+            pointer-events: none; /* Make it unclickable */
+        }
+        
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #4A4A4A;
+            margin-top: 60px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Header Image Styling */
+        .header-image {
+            width: 100%;
+            max-width: 500px; /* Adjust as needed */
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Main container for the invitation content */
+        .invitation-container {
+            padding: 20px 20px 120px 20px; /* Adjusted padding-top */
+            position: relative;
+        }
+        
+        /* Bismillah text styling */
+        .bismillah {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        /* Styling for names */
+        .names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .names .ampersand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin: 5px 0;
+        }
+
+        /* Invitation text styling */
+        .invitation-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 30px auto;
+            max-width: 80%;
+        }
+
+        /* Couple's names styling */
+        .couple-names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #4A4A4A;
+            margin-top: 40px;
+        }
+
+        .couple-names .ampersand {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin: 10px 0;
+        }
+		
+        /* Event Details Section */
+        .event-details {
+            margin: 50px auto 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding: 30px 20px;
+            border-top: 1px solid #e0d5c4;
+            border-bottom: 1px solid #e0d5c4;
+            max-width: 500px;
+        }
+        .detail-item h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            color: #4A4A4A;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .detail-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* YouTube Video Container */
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 560px;
+            margin: 30px auto;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Bottom navigation bar styling */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #A9B7A8; /* Sage green */
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        /* RSVP Form Styling */
+        .rsvp-form {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+        .rsvp-form h3 {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            color: #4A4A4A;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-group input:disabled {
+            background-color: #f2f2f2;
+            cursor: not-allowed;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            background-color: #A9B7A8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .form-group button:hover {
+            background-color: #99a798;
+        }
+        .form-group button:disabled {
+            background-color: #ccc;
+            cursor: wait;
+        }
+        .success-message {
+            color: green;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid green;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid red;
+            background-color: #ffebee;
+            border-radius: 5px;
+        }
+
+        /* Wishes (Ucapan) Section Styling */
+        .wishes-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .wish-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            text-align: left;
+        }
+        .wish-item:last-child {
+            border-bottom: none;
+        }
+        .wish-item .wisher-name {
+            font-weight: bold;
+            color: #A9B7A8;
+            margin-bottom: 5px;
+        }
+        .wish-item .wish-text {
+            font-style: italic;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Modal (popup) styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 40% auto;
+            padding: 25px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            position: relative;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            animation: slideIn 0.4s;
+        }
+        
+        .modal-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #4A4A4A;
+            margin-top: 0;
+        }
+
+        .contact-person p { margin: 5px 0; }
+        .contact-person a { color: #A9B7A8; text-decoration: none; font-weight: bold; }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover, .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .action-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #A9B7A8;
+            color: white;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .action-buttons a:hover { background-color: #99a798; }
+        .action-buttons a i { margin-right: 10px; font-size: 1.2rem; }
+
+        @keyframes fadeIn {
+            from {opacity: 0;} to {opacity: 1;}
+        }
+        @keyframes slideIn {
+            from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;}
+        }
+
+    </style>
+</head>
+<body>
+    
+    <canvas id="snowfall"></canvas>
+
+    <img src="izzahprimula.png" alt="Wedding Invitation Card" class="header-image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/FDF5E6/A9B7A8?text=Invitation';">
+
+    <div class="invitation-container">
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
+        <div class="names">Dato’ Baidzawi Che Mat<br><span class="ampersand">&</span><br>To’ Puan Fadhilah Mustafa</div>
+        <div class="invitation-text">Dengan penuh kesyukuran, kami mempersilakan<br>Tan Sri | Puan Sri | Dato' | Datin | Tuan | Puan | Encik | Cik<br>hadir ke majlis perkahwinan puteri kami</div>
+        <div class="couple-names">Nurul Izzah Baidzawi<br><span class="ampersand">&</span><br>Muhammad Hafizan Muda</div>
+
+        <div class="event-details">
+            <div class="detail-item">
+                <h3>Tempat</h3>
+                <p>Dewan Gamelan</p>
+                <p>Primula Hotel, Kuala Terengganu</p>
+            </div>
+            <div class="detail-item">
+                <h3>Tarikh</h3>
+                <p>Sabtu, 27 September 2025</p>
+                <p>bersamaan 4 Rabi'ul-Akhir 1447H</p>
+            </div>
+            <div class="detail-item">
+                <h3>Waktu</h3>
+                <p>11:00 Pagi - 4:00 Petang</p>
+            </div>
+        </div>
+        
+		<img src="aturcara.png" alt="Wedding Itinerary" class="header-image" onerror="this.style.display='none'">
+		
+		
+        <div id="rsvp" class="rsvp-form">
+            <!-- This section will be populated by JavaScript -->
+        </div>
+
+        <!-- Wishes Display Section -->
+        <div class="wishes-container">
+            <h2 class="section-title">Ucapan & Doa</h2>
+            <div id="wishes-list">
+                <!-- Wishes will be populated by JavaScript -->
+                 <p>Loading wishes...</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Lagu</h2>
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/ZeFpigRaXbI?autoplay=1&mute=0&loop=1&playlist=ZeFpigRaXbI&controls=0&showinfo=0&rel=0"
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a id="calendarBtn" class="nav-item"><i class="fa-regular fa-calendar-days"></i><span>Kalendar</span></a>
+        <a id="contactBtn" class="nav-item"><i class="fa-solid fa-phone"></i><span>Hubungi</span></a>
+        <a id="locationBtn" class="nav-item"><i class="fa-solid fa-location-dot"></i><span>Lokasi</span></a>
+        <a href="#rsvp" class="nav-item"><i class="fa-regular fa-envelope"></i><span>RSVP</span></a>
+    </div>
+
+    <div id="calendarModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeCalendar">×</span>
+            <h2>Simpan Tarikh</h2>
+            <p>27 September 2025</p>
+			<p>11:00 Pagi - 4:00 Petang</p>
+            <div class="action-buttons">
+                <a id="appleCalendarLink" href="#" download="wedding_Izzah_Hafizan.ics"><i class="fab fa-apple"></i> Apple Calendar</a>
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Majlis+Perkahwinan+Izzah+%26+Hafizan&dates=20250927T110000/20250927T160000&details=Majlis+Perkahwinan+Nurul+Izzah+Binti+Dato'+Baidzawi+%26+Muhammad+Hafizan+Bin+Muda&location=Dewan+Gamelan,+Primula+Hotel+Kuala+Terengganu&ctz=Asia/Kuala_Lumpur" target="_blank"><i class="fab fa-google"></i> Google Calendar</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeContact">×</span>
+            <h2>Hubungi Kami</h2>
+            <div class="contact-person"><p><strong>Keluarga Pengantin</strong></p><p>Dato': <a href="tel:+60129880234">012-9880234</a></p><p>To'Puan: <a href="tel:+60122782234">012-2782234</a></p><p>Izzah: <a href="tel:+60123808354">012-3808354</a></p></div>
+        </div>
+    </div>
+
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeLocation">×</span>
+            <h2>Lokasi Majlis</h2>
+            <p>Dewan Gamelan, Primula Hotel Kuala Terengganu</p>
+            <div class="action-buttons">
+                <a href="https://www.google.com/maps/search/?api=1&query=Primula+Hotel+Kuala+Terengganu" target="_blank"><i class="fas fa-map-marked-alt"></i> Google Maps</a>
+                <a href="waze://?ll=5.3375,103.1430&navigate=yes" target="_blank"><i class="fab fa-waze"></i> Waze</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            
+            // --- Snowfall Effect ---
+            const canvas = document.getElementById('snowfall');
+            const ctx = canvas.getContext('2d');
+
+            function startSnowfall() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                const snowflakes = [];
+                const snowflakeCount = 100;
+
+                for (let i = 0; i < snowflakeCount; i++) {
+                    snowflakes.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        radius: Math.random() * 3 + 1,
+                        density: Math.random() * snowflakeCount
+                    });
+                }
+
+                function drawSnowflakes() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                    ctx.beginPath();
+                    for (let i = 0; i < snowflakes.length; i++) {
+                        const f = snowflakes[i];
+                        ctx.moveTo(f.x, f.y);
+                        ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2, true);
+                    }
+                    ctx.fill();
+                    moveSnowflakes();
+                }
+
+                function moveSnowflakes() {
+                    for (let i = 0; i < snowflakes.length; i++) {
+                        const f = snowflakes[i];
+                        f.y += Math.pow(f.radius, 0.5) * 0.1;
+
+                        if (f.y > canvas.height) {
+                            snowflakes[i] = {
+                                x: Math.random() * canvas.width,
+                                y: 0,
+                                radius: f.radius,
+                                density: f.density
+                            };
+                        }
+                    }
+                }
+                
+                setInterval(drawSnowflakes, 25);
+            }
+
+            // --- Modal Setup ---
+            function setupModal(modalId, buttonId, closeButtonId) {
+                const modal = document.getElementById(modalId);
+                const btn = document.getElementById(buttonId);
+                const span = document.getElementById(closeButtonId);
+
+                if (modal && btn && span) {
+                    btn.onclick = function() { modal.style.display = "block"; }
+                    span.onclick = function() { modal.style.display = "none"; }
+                }
+            }
+            
+            setupModal('contactModal', 'contactBtn', 'closeContact');
+            setupModal('calendarModal', 'calendarBtn', 'closeCalendar');
+            setupModal('locationModal', 'locationBtn', 'closeLocation');
+            
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = "none";
+                }
+            }
+
+            // --- ICS Calendar File Generation ---
+            function generateIcsFile() {
+                const title = "Majlis Perkahwinan Izzah & Hafizan";
+                const description = "Majlis Perkahwinan Nurul Izzah Binti Dato' Baidzawi & Muhammad Hafizan Bin Muda. Sila sahkan kehadiran anda.";
+                const location = "Dewan Gamelan, Primula Hotel Kuala Terengganu";
+                const startDate = "20250927T110000";
+                const endDate = "20250927T160000";
+                const timezone = "Asia/Kuala_Lumpur";
+
+                const icsContent = [
+                    "BEGIN:VCALENDAR",
+                    "VERSION:2.0",
+                    "PRODID:-//YourCompany//NONSGML v1.0//EN",
+                    "BEGIN:VEVENT",
+                    "UID:" + new Date().getTime() + "@yourdomain.com",
+                    "DTSTAMP:" + new Date().toISOString().replace(/[-:.]/g, "") + "Z",
+                    "DTSTART;TZID=" + timezone + ":" + startDate,
+                    "DTEND;TZID=" + timezone + ":" + endDate,
+                    "SUMMARY:" + title,
+                    "DESCRIPTION:" + description,
+                    "LOCATION:" + location,
+                    "END:VEVENT",
+                    "END:VCALENDAR"
+                ].join("\r\n");
+
+                const appleCalendarLink = document.getElementById('appleCalendarLink');
+                appleCalendarLink.href = 'data:text/calendar;charset=utf8,' + encodeURIComponent(icsContent);
+            }
+
+            // --- RSVP & Wishes Logic ---
+            const rsvpContainer = document.getElementById('rsvp');
+            const wishesListContainer = document.getElementById('wishes-list');
+            const functionUrl = '/.netlify/functions/submit-rsvp'; // The path to our Netlify function
+
+            // We will not display wishes for now, as it requires a separate function to fetch data.
+            // This simplifies the initial setup. We can add this feature later.
+            wishesListContainer.innerHTML = "<p>Thank you for your wishes!</p>";
+
+            function displayRsvpForm() {
+                // We will no longer check localStorage for submission status,
+                // as we want the form to be available for all users.
+                // A more advanced version could check if a user has already submitted via a cookie.
+                
+                rsvpContainer.innerHTML = `
+                    <h3>Pengesahan Kehadiran & Ucapan</h3>
+                    <div id="form-message"></div>
+                    <form id="rsvp-form">
+                        <div class="form-group"><label for="name">Nama Penuh</label><input type="text" id="name" name="name" required></div>
+                        <div class="form-group"><label for="attendance">Kehadiran</label><select id="attendance" name="attendance" required><option value="">-- Sila Pilih --</option><option value="Hadir">Hadir</option><option value="Tidak Hadir">Tidak Hadir</option></select></div>
+                        <div class="form-group"><label for="guests">Bilangan Tetamu (Termasuk Anda)</label><input type="number" id="guests" name="guests" min="1" value="1" required></div>
+                        <div class="form-group"><label for="ucapan">Ucapan & Doa</label><textarea id="ucapan" name="ucapan" placeholder="Tinggalkan ucapan anda di sini..."></textarea></div>
+                        <div class="form-group"><button type="submit" id="submit-button">Hantar</button></div>
+                    </form>
+                `;
+                
+                const rsvpForm = document.getElementById('rsvp-form');
+                const attendanceSelect = document.getElementById('attendance');
+                const guestsInput = document.getElementById('guests');
+
+                attendanceSelect.addEventListener('change', function() {
+                    if (this.value === 'Tidak Hadir') {
+                        guestsInput.value = '0';
+                        guestsInput.disabled = true;
+                        guestsInput.required = false;
+                    } else {
+                        guestsInput.value = '1';
+                        guestsInput.disabled = false;
+                        guestsInput.required = true;
+                    }
+                });
+
+                rsvpForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const formMessage = document.getElementById('form-message');
+                    const submitButton = document.getElementById('submit-button');
+                    
+                    formMessage.innerHTML = ''; // Clear previous messages
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Menghantar...';
+
+                    const formData = {
+                        name: document.getElementById('name').value.trim(),
+                        attendance: attendanceSelect.value,
+                        guests: guestsInput.value,
+                        ucapan: document.getElementById('ucapan').value.trim()
+                    };
+
+                    if (!formData.name || !formData.attendance) {
+                        formMessage.innerHTML = `<p class="error-message">Sila isi semua ruangan yang diperlukan.</p>`;
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Hantar';
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(functionUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(formData)
+                        });
+
+                        if (response.ok) {
+                            // Success! Show a thank you message and hide the form.
+                            rsvpContainer.innerHTML = `<p class="success-message">Terima kasih! RSVP dan ucapan anda telah diterima.</p>`;
+                        } else {
+                            // If the server returns an error, display it.
+                            const errorResult = await response.json();
+                            throw new Error(errorResult.error || 'An error occurred.');
+                        }
+                    } catch (error) {
+                        console.error('Submission failed:', error);
+                        formMessage.innerHTML = `<p class="error-message">Maaf, terdapat ralat semasa menghantar RSVP anda. Sila cuba lagi.</p>`;
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Hantar';
+                    }
+                });
+            }
+
+
+            // --- Initial Page Load ---
+            startSnowfall();
+            window.addEventListener('resize', startSnowfall);
+            generateIcsFile();
+            displayRsvpForm();
+        });
+    </script>
+</body>
+</html>
