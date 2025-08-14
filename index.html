@@ -104,7 +104,7 @@
             margin: 10px 0;
         }
 		
-        /* --- NEW: Countdown Timer Styling --- */
+        /* Countdown Timer Styling */
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -160,25 +160,24 @@
             line-height: 1.5;
         }
 
-        /* YouTube Video Container */
-        .video-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 560px;
-            margin: 30px auto;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
+        /* --- NEW: Music Control Button --- */
+        #music-control {
+            position: fixed;
+            bottom: 80px; /* Position above the bottom nav */
+            right: 15px;
+            background-color: rgba(169, 183, 168, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
         }
 
         /* Bottom navigation bar styling */
@@ -407,7 +406,7 @@
         <div class="invitation-text">Dengan penuh kesyukuran, kami mempersilakan<br>Tan Sri | Puan Sri | Dato' | Datin | Tuan | Puan | Encik | Cik<br>hadir ke majlis perkahwinan puteri kami</div>
         <div class="couple-names">Nurul Izzah Baidzawi<br><span class="ampersand">&</span><br>Muhammad Hafizan Muda</div>
 
-        <!-- NEW: Countdown Timer -->
+        <!-- Countdown Timer -->
         <div id="countdown" class="countdown-container">
             <div class="countdown-item">
                 <span id="days">00</span>
@@ -459,16 +458,6 @@
             </div>
         </div>
 
-        <h2 class="section-title">Lagu</h2>
-        <div class="video-container">
-            <iframe 
-                src="https://www.youtube.com/embed/ZeFpigRaXbI?autoplay=1&mute=1&loop=1&playlist=ZeFpigRaXbI&controls=0&showinfo=0&rel=0"
-                title="YouTube video player" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-            </iframe>
-        </div>
     </div>
 
     <div class="bottom-nav">
@@ -477,6 +466,15 @@
         <a id="locationBtn" class="nav-item"><i class="fa-solid fa-location-dot"></i><span>Lokasi</span></a>
         <a href="#rsvp" class="nav-item"><i class="fa-regular fa-envelope"></i><span>RSVP</span></a>
     </div>
+
+    <!-- NEW: Audio Player and Control Button -->
+    <audio id="background-music" loop>
+        <!-- IMPORTANT: Replace this with the actual path to your MP3 file -->
+        <source src="izzah.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <button id="music-control"><i class="fas fa-volume-mute"></i></button>
+
 
     <div id="calendarModal" class="modal">
         <div class="modal-content">
@@ -590,6 +588,26 @@
                     }
                 }, 1000);
             }
+
+            // --- Music Player Logic ---
+            const music = document.getElementById('background-music');
+            const musicControl = document.getElementById('music-control');
+            
+            // Attempt to play music automatically. This might be blocked by the browser.
+            music.play().catch(() => {
+                console.log("Autoplay was blocked. User interaction needed.");
+            });
+
+            musicControl.addEventListener('click', () => {
+                if (music.paused) {
+                    music.play();
+                    musicControl.innerHTML = '<i class="fas fa-volume-up"></i>';
+                } else {
+                    music.pause();
+                    musicControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                }
+            });
+
 
             // --- Modal Setup ---
             function setupModal(modalId, buttonId, closeButtonId) {
@@ -755,13 +773,12 @@
 
             // --- Initial Page Load ---
             startSnowfall();
-            startCountdown(); // Start the new countdown timer
+            startCountdown();
             window.addEventListener('resize', startSnowfall);
             generateIcsFile();
             displayRsvpForm();
-            fetchAndDisplayWishes(); // Fetch wishes when the page loads
+            fetchAndDisplayWishes();
         });
     </script>
 </body>
 </html>
-
