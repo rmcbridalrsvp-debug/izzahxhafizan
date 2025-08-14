@@ -104,6 +104,36 @@
             margin: 10px 0;
         }
 		
+        /* --- NEW: Countdown Timer Styling --- */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px auto;
+            max-width: 500px;
+        }
+        .countdown-item {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid #e0d5c4;
+            border-radius: 8px;
+            padding: 10px 15px;
+            min-width: 60px;
+        }
+        .countdown-item span {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .countdown-item span:first-child {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4A4A4A;
+        }
+        .countdown-item span:last-child {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
         /* Event Details Section */
         .event-details {
             margin: 50px auto 40px auto;
@@ -377,6 +407,26 @@
         <div class="invitation-text">Dengan penuh kesyukuran, kami mempersilakan<br>Tan Sri | Puan Sri | Dato' | Datin | Tuan | Puan | Encik | Cik<br>hadir ke majlis perkahwinan puteri kami</div>
         <div class="couple-names">Nurul Izzah Baidzawi<br><span class="ampersand">&</span><br>Muhammad Hafizan Muda</div>
 
+        <!-- NEW: Countdown Timer -->
+        <div id="countdown" class="countdown-container">
+            <div class="countdown-item">
+                <span id="days">00</span>
+                <span>Hari</span>
+            </div>
+            <div class="countdown-item">
+                <span id="hours">00</span>
+                <span>Jam</span>
+            </div>
+            <div class="countdown-item">
+                <span id="minutes">00</span>
+                <span>Minit</span>
+            </div>
+            <div class="countdown-item">
+                <span id="seconds">00</span>
+                <span>Saat</span>
+            </div>
+        </div>
+
         <div class="event-details">
             <div class="detail-item">
                 <h3>Tempat</h3>
@@ -405,7 +455,6 @@
         <div class="wishes-container">
             <h2 class="section-title">Ucapan & Doa</h2>
             <div id="wishes-list">
-                <!-- Wishes will be populated by JavaScript -->
                  <p>Loading wishes...</p>
             </div>
         </div>
@@ -517,6 +566,31 @@
                 setInterval(drawSnowflakes, 25);
             }
 
+            // --- Countdown Timer ---
+            function startCountdown() {
+                const countdownDate = new Date("September 27, 2025 11:00:00").getTime();
+
+                const interval = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = countdownDate - now;
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById("days").innerText = days < 10 ? '0' + days : days;
+                    document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
+                    document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
+                    document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+
+                    if (distance < 0) {
+                        clearInterval(interval);
+                        document.getElementById("countdown").innerHTML = "<h3>The day is here!</h3>";
+                    }
+                }, 1000);
+            }
+
             // --- Modal Setup ---
             function setupModal(modalId, buttonId, closeButtonId) {
                 const modal = document.getElementById(modalId);
@@ -571,17 +645,38 @@
             // --- RSVP & Wishes Logic ---
             const rsvpContainer = document.getElementById('rsvp');
             const wishesListContainer = document.getElementById('wishes-list');
-            const functionUrl = '/.netlify/functions/submit-rsvp'; // The path to our Netlify function
+            const submitFunctionUrl = '/.netlify/functions/submit-rsvp';
+            const getWishesFunctionUrl = '/.netlify/functions/get-wishes';
 
-            // We will not display wishes for now, as it requires a separate function to fetch data.
-            // This simplifies the initial setup. We can add this feature later.
-            wishesListContainer.innerHTML = "<p>Thank you for your wishes!</p>";
+            async function fetchAndDisplayWishes() {
+                try {
+                    const response = await fetch(getWishesFunctionUrl);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch wishes');
+                    }
+                    const wishes = await response.json();
+                    
+                    wishesListContainer.innerHTML = ''; // Clear "Loading..." message
+                    if (wishes && wishes.length > 0) {
+                        wishes.slice().reverse().forEach(wish => {
+                            const wishItem = document.createElement('div');
+                            wishItem.className = 'wish-item';
+                            wishItem.innerHTML = `
+                                <p class="wisher-name">${wish.name}</p>
+                                <p class="wish-text">"${wish.ucapan}"</p>
+                            `;
+                            wishesListContainer.appendChild(wishItem);
+                        });
+                    } else {
+                        wishesListContainer.innerHTML = "<p>Tiada ucapan lagi. Jadilah yang pertama!</p>";
+                    }
+                } catch (error) {
+                    console.error('Error fetching wishes:', error);
+                    wishesListContainer.innerHTML = "<p>Could not load wishes at this time.</p>";
+                }
+            }
 
             function displayRsvpForm() {
-                // We will no longer check localStorage for submission status,
-                // as we want the form to be available for all users.
-                // A more advanced version could check if a user has already submitted via a cookie.
-                
                 rsvpContainer.innerHTML = `
                     <h3>Pengesahan Kehadiran & Ucapan</h3>
                     <div id="form-message"></div>
@@ -615,7 +710,7 @@
                     const formMessage = document.getElementById('form-message');
                     const submitButton = document.getElementById('submit-button');
                     
-                    formMessage.innerHTML = ''; // Clear previous messages
+                    formMessage.innerHTML = '';
                     submitButton.disabled = true;
                     submitButton.textContent = 'Menghantar...';
 
@@ -634,17 +729,17 @@
                     }
 
                     try {
-                        const response = await fetch(functionUrl, {
+                        const response = await fetch(submitFunctionUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(formData)
                         });
 
                         if (response.ok) {
-                            // Success! Show a thank you message and hide the form.
                             rsvpContainer.innerHTML = `<p class="success-message">Terima kasih! RSVP dan ucapan anda telah diterima.</p>`;
+                            // Refresh the wishes list to show the new wish immediately
+                            fetchAndDisplayWishes();
                         } else {
-                            // If the server returns an error, display it.
                             const errorResult = await response.json();
                             throw new Error(errorResult.error || 'An error occurred.');
                         }
@@ -660,9 +755,11 @@
 
             // --- Initial Page Load ---
             startSnowfall();
+            startCountdown(); // Start the new countdown timer
             window.addEventListener('resize', startSnowfall);
             generateIcsFile();
             displayRsvpForm();
+            fetchAndDisplayWishes(); // Fetch wishes when the page loads
         });
     </script>
 </body>
