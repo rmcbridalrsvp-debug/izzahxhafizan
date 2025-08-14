@@ -20,8 +20,8 @@
             overflow-x: hidden;
         }
 
-        /* Snowfall Canvas Styling */
-        #snowfall {
+        /* --- UPDATED: Particle Canvas Styling --- */
+        #particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -31,6 +31,17 @@
             pointer-events: none; /* Make it unclickable */
         }
         
+        /* Scroll Animation Styling */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .section-title {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.8rem;
@@ -396,18 +407,18 @@
 </head>
 <body>
     
-    <canvas id="snowfall"></canvas>
+    <canvas id="particle-canvas"></canvas>
 
     <img src="izzahprimula.png" alt="Wedding Invitation Card" class="header-image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/FDF5E6/A9B7A8?text=Invitation';">
 
     <div class="invitation-container">
-        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
-        <div class="names">Dato’ Baidzawi Che Mat<br><span class="ampersand">&</span><br>To’ Puan Fadhilah Mustafa</div>
-        <div class="invitation-text">Dengan penuh kesyukuran, kami mempersilakan<br>Tan Sri | Puan Sri | Dato' | Datin | Tuan | Puan | Encik | Cik<br>hadir ke majlis perkahwinan puteri kami</div>
-        <div class="couple-names">Nurul Izzah Baidzawi<br><span class="ampersand">&</span><br>Muhammad Hafizan Muda</div>
+        <div class="bismillah fade-in-element">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
+        <div class="names fade-in-element">Dato’ Baidzawi Che Mat<br><span class="ampersand">&</span><br>To’ Puan Fadhilah Mustafa</div>
+        <div class="invitation-text fade-in-element">Dengan penuh kesyukuran, kami mempersilakan<br>Tan Sri | Puan Sri | Dato' | Datin | Tuan | Puan | Encik | Cik<br>hadir ke majlis perkahwinan puteri kami</div>
+        <div class="couple-names fade-in-element">Nurul Izzah Baidzawi<br><span class="ampersand">&</span><br>Muhammad Hafizan Muda</div>
 
         <!-- Countdown Timer -->
-        <div id="countdown" class="countdown-container">
+        <div id="countdown" class="countdown-container fade-in-element">
             <div class="countdown-item">
                 <span id="days">00</span>
                 <span>Hari</span>
@@ -426,7 +437,7 @@
             </div>
         </div>
 
-        <div class="event-details">
+        <div class="event-details fade-in-element">
             <div class="detail-item">
                 <h3>Tempat</h3>
                 <p>Dewan Gamelan</p>
@@ -443,15 +454,15 @@
             </div>
         </div>
         
-		<img src="aturcara.png" alt="Wedding Itinerary" class="header-image" onerror="this.style.display='none'">
+		<img src="aturcara.png" alt="Wedding Itinerary" class="header-image fade-in-element" onerror="this.style.display='none'">
 		
 		
-        <div id="rsvp" class="rsvp-form">
+        <div id="rsvp" class="rsvp-form fade-in-element">
             <!-- This section will be populated by JavaScript -->
         </div>
 
         <!-- Wishes Display Section -->
-        <div class="wishes-container">
+        <div class="wishes-container fade-in-element">
             <h2 class="section-title">Ucapan & Doa</h2>
             <div id="wishes-list">
                  <p>Loading wishes...</p>
@@ -512,57 +523,49 @@
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             
-            // --- Snowfall Effect ---
-            const canvas = document.getElementById('snowfall');
+            // --- UPDATED: Particle Effect ---
+            const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
+            let particlesArray;
 
-            function startSnowfall() {
+            function startParticles() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-
-                const snowflakes = [];
-                const snowflakeCount = 100;
-
-                for (let i = 0; i < snowflakeCount; i++) {
-                    snowflakes.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        radius: Math.random() * 3 + 1,
-                        density: Math.random() * snowflakeCount
-                    });
+                particlesArray = [];
+                const numberOfParticles = (canvas.height * canvas.width) / 9000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2) + 1;
+                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * .4) - .2;
+                    let directionY = (Math.random() * .4) - .2;
+                    let color = 'rgba(255, 255, 255, 0.8)';
+                    particlesArray.push({x, y, directionX, directionY, size, color});
                 }
-
-                function drawSnowflakes() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-                    ctx.beginPath();
-                    for (let i = 0; i < snowflakes.length; i++) {
-                        const f = snowflakes[i];
-                        ctx.moveTo(f.x, f.y);
-                        ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2, true);
-                    }
-                    ctx.fill();
-                    moveSnowflakes();
-                }
-
-                function moveSnowflakes() {
-                    for (let i = 0; i < snowflakes.length; i++) {
-                        const f = snowflakes[i];
-                        f.y += Math.pow(f.radius, 0.5) * 0.1;
-
-                        if (f.y > canvas.height) {
-                            snowflakes[i] = {
-                                x: Math.random() * canvas.width,
-                                y: 0,
-                                radius: f.radius,
-                                density: f.density
-                            };
-                        }
-                    }
-                }
-                
-                setInterval(drawSnowflakes, 25);
             }
+
+            function animateParticles() {
+                requestAnimationFrame(animateParticles);
+                ctx.clearRect(0,0,innerWidth, innerHeight);
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    let particle = particlesArray[i];
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2, false);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+
+                    if (particle.x + particle.size > canvas.width || particle.x - particle.size < 0) {
+                        particle.directionX = -particle.directionX;
+                    }
+                    if (particle.y + particle.size > canvas.height || particle.y - particle.size < 0) {
+                        particle.directionY = -particle.directionY;
+                    }
+                    particle.x += particle.directionX;
+                    particle.y += particle.directionY;
+                }
+            }
+
 
             // --- Countdown Timer ---
             function startCountdown() {
@@ -594,21 +597,17 @@
             const musicControl = document.getElementById('music-control');
 
             function playMusicOnFirstInteraction() {
-                // Try to play the music
                 music.play().then(() => {
-                    // If play is successful, update the icon
                     musicControl.innerHTML = '<i class="fas fa-volume-up"></i>';
                 }).catch(error => {
                     console.error("Music play failed:", error);
                 });
             }
 
-            // Add a one-time event listener for the first user interaction (click or touch)
             document.body.addEventListener('click', playMusicOnFirstInteraction, { once: true });
             document.body.addEventListener('touchstart', playMusicOnFirstInteraction, { once: true });
 
             musicControl.addEventListener('click', (e) => {
-                // Stop the event from bubbling up to the body listener if it hasn't fired yet
                 e.stopPropagation(); 
                 if (music.paused) {
                     music.play();
@@ -781,11 +780,32 @@
                 });
             }
 
+            // --- Scroll Animation Logic ---
+            function setupScrollAnimation() {
+                const elements = document.querySelectorAll('.fade-in-element');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1 // Trigger when 10% of the element is visible
+                });
+
+                elements.forEach(element => {
+                    observer.observe(element);
+                });
+            }
+
 
             // --- Initial Page Load ---
-            startSnowfall();
+            startParticles();
+            animateParticles();
             startCountdown();
-            window.addEventListener('resize', startSnowfall);
+            setupScrollAnimation();
+            window.addEventListener('resize', startParticles);
             generateIcsFile();
             displayRsvpForm();
             fetchAndDisplayWishes();
