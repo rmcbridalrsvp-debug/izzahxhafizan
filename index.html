@@ -160,7 +160,7 @@
             line-height: 1.5;
         }
 
-        /* --- NEW: Music Control Button --- */
+        /* Music Control Button */
         #music-control {
             position: fixed;
             bottom: 80px; /* Position above the bottom nav */
@@ -467,7 +467,7 @@
         <a href="#rsvp" class="nav-item"><i class="fa-regular fa-envelope"></i><span>RSVP</span></a>
     </div>
 
-    <!-- NEW: Audio Player and Control Button -->
+    <!-- Audio Player and Control Button -->
     <audio id="background-music" loop>
         <!-- IMPORTANT: Replace this with the actual path to your MP3 file -->
         <source src="izzah.mp3" type="audio/mpeg">
@@ -592,13 +592,24 @@
             // --- Music Player Logic ---
             const music = document.getElementById('background-music');
             const musicControl = document.getElementById('music-control');
-            
-            // Attempt to play music automatically. This might be blocked by the browser.
-            music.play().catch(() => {
-                console.log("Autoplay was blocked. User interaction needed.");
-            });
 
-            musicControl.addEventListener('click', () => {
+            function playMusicOnFirstInteraction() {
+                // Try to play the music
+                music.play().then(() => {
+                    // If play is successful, update the icon
+                    musicControl.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }).catch(error => {
+                    console.error("Music play failed:", error);
+                });
+            }
+
+            // Add a one-time event listener for the first user interaction (click or touch)
+            document.body.addEventListener('click', playMusicOnFirstInteraction, { once: true });
+            document.body.addEventListener('touchstart', playMusicOnFirstInteraction, { once: true });
+
+            musicControl.addEventListener('click', (e) => {
+                // Stop the event from bubbling up to the body listener if it hasn't fired yet
+                e.stopPropagation(); 
                 if (music.paused) {
                     music.play();
                     musicControl.innerHTML = '<i class="fas fa-volume-up"></i>';
